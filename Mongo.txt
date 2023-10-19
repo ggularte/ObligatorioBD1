@@ -1,0 +1,222 @@
+//CREACION DE LA COLECCIÓN
+db.createCollection("mensajes", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["texto", "fecha", "usuarioEmisorId"],
+      properties: {
+        texto: {
+          bsonType: "string",
+          description: "El texto del mensaje"
+        },
+        fecha: {
+          bsonType: "date",
+          description: "La fecha de creación del mensaje"
+        },
+        enlaces: {
+          bsonType: "array",
+          items: {
+            bsonType: "string",
+            description: "Enlaces relacionados en el mensaje"
+          }
+        },
+        hashtags: {
+          bsonType: "array",
+          items: {
+            bsonType: "string",
+            description: "Hashtags relacionados en el mensaje"
+          }
+        },
+        fijado: {
+          bsonType: "bool",
+          description: "Indica si el mensaje está fijado en un canal"
+        },
+        archivos: {
+          bsonType: "array",
+          items: {
+            bsonType: "object",
+            required: ["nombreArchivo", "tipoArchivo", "tamano", "fechaCreacion", "usuarioPropietarioId"],
+            properties: {
+              nombreArchivo: {
+                bsonType: "string",
+                description: "Nombre del archivo adjunto"
+              },
+              tipoArchivo: {
+                bsonType: "string",
+                description: "Tipo del archivo adjunto"
+              },
+              tamano: {
+                bsonType: "number",
+                description: "Tamaño del archivo adjunto"
+              },
+              fechaCreacion: {
+                bsonType: "date",
+                description: "Fecha de creación del archivo adjunto"
+              },
+              usuarioPropietarioId: {
+                bsonType: "objectId",
+                description: "ID del usuario propietario del archivo"
+              }
+            }
+          }
+        },
+        usuarioEmisorId: {
+          bsonType: "string",
+          description: "ID del usuario emisor del mensaje"
+        },
+        usuarioReceptorId: {
+          bsonType: "string",
+          description: "ID del usuario receptor del mensaje (en caso de mensaje directo)"
+        },
+        canalId: {
+          bsonType: "string",
+          description: "ID del canal al que pertenece el mensaje (en caso de ser mensaje a canal)"
+        },
+        servidorId: {
+          bsonType: "string",
+          description: "ID del servidor al que pertenece el mensaje (en caso de ser mensaje a canal)"
+        }
+      }
+    }
+  }
+});
+
+//DATOS DE PRUEBA
+db.mensajes.insertMany([
+  {
+    texto: "¡Hola! ¿Cómo estás?",
+    fecha: ISODate("2023-06-01T10:30:00Z"),
+    enlaces: ["https://www.ejemplo.com"],
+    hashtags: ["saludo"],
+    fijado: false,
+    archivos: [
+      {
+        nombreArchivo: "archivo1.pdf",
+        tipoArchivo: "pdf",
+        tamano: 1024,
+        fechaCreacion: ISODate("2023-06-01T10:31:00Z"),
+        usuarioPropietarioId: ObjectId("60c7b567b7b836001f9f5e77")
+      }
+    ],
+    usuarioEmisorId: "60c7b567b7b836001f9f5e78",
+    usuarioReceptorId: "60c7b567b7b836001f9f5e79"
+  },
+  {
+    texto: "¡Buen día!",
+    fecha: ISODate("2023-06-02T09:00:00Z"),
+    enlaces: [],
+    hashtags: ["saludo", "día"],
+    fijado: true,
+    archivos: [],
+    usuarioEmisorId: "60c7b567b7b836001f9f5e7a",
+    canalId: "60c7b567b7b836001f9f5e7b",
+    servidorId: "60c7b567b7b836001f9f5e7c"
+  },
+  {
+    texto: "¡Feliz cumpleaños!",
+    fecha: ISODate("2023-06-03T14:45:00Z"),
+    enlaces: ["https://www.ejemplo.com/felizcumple"],
+    hashtags: ["cumpleaños"],
+    fijado: false,
+    archivos: [
+      {
+        nombreArchivo: "imagen.jpg",
+        tipoArchivo: "imagen",
+        tamano: 2048,
+        fechaCreacion: ISODate("2023-06-03T14:46:00Z"),
+        usuarioPropietarioId: ObjectId("60c7b567b7b836001f9f5e7d")
+      },
+      {
+        nombreArchivo: "video.mp4",
+        tipoArchivo: "video",
+        tamano: 4096,
+        fechaCreacion: ISODate("2023-06-03T14:47:00Z"),
+        usuarioPropietarioId: ObjectId("60c7b567b7b836001f9f5e7e")
+      }
+    ],
+    usuarioEmisorId: "60c7b567b7b836001f9f5e7f",
+    usuarioReceptorId: "60c7b567b7b836001f9f5e80"
+  },
+  {
+    texto: "¡Hola a todos!",
+    fecha: ISODate("2023-06-04T12:00:00Z"),
+    enlaces: [],
+    hashtags: [],
+    fijado: false,
+    archivos: [],
+    usuarioEmisorId: "60c7b567b7b836001f9f5e81",
+    canalId: "60c7b567b7b836001f9f5e82",
+    servidorId: "60c7b567b7b836001f9f5e83"
+  },
+  {
+    texto: "¡Bienvenidos al canal de noticias!",
+    fecha: ISODate("2023-06-05T09:30:00Z"),
+    enlaces: ["https://www.ejemplo.com/noticias"],
+    hashtags: ["noticias", "bienvenida"],
+    fijado: true,
+    archivos: [],
+    usuarioEmisorId: "60c7b567b7b836001f9f5e84",
+    canalId: "60c7b567b7b836001f9f5e82",
+    servidorId: "60c7b567b7b836001f9f5e83"
+  },
+  {
+    texto: "¡Felicidades a todos los graduados!",
+    fecha: ISODate("2023-06-06T15:00:00Z"),
+    enlaces: [],
+    hashtags: ["graduación", "celebración"],
+    fijado: false,
+    archivos: [],
+    usuarioEmisorId: "60c7b567b7b836001f9f5e85",
+    canalId: "60c7b567b7b836001f9f5e86",
+    servidorId: "60c7b567b7b836001f9f5e83"
+  },
+  {
+    texto: "¡Buenas tardes a todos!",
+    fecha: ISODate("2023-06-07T17:30:00Z"),
+    enlaces: [],
+    hashtags: [],
+    fijado: false,
+    archivos: [],
+    usuarioEmisorId: "60c7b567b7b836001f9f5e87",
+    canalId: "60c7b567b7b836001f9f5e86",
+    servidorId: "60c7b567b7b836001f9f5e83"
+  }
+]);
+
+//CONSULTAS MONGO
+//Requerimiento 4: Proveer una consulta que dado un usuario, un servidor y un rango de fechas devuelva la cantidad de mensajes que envió el usuario en cada canal en los que participó, ordenado de mayor a menor según la cantidad de mensajes
+var usuarioId = "1";//Cambiar ID del Usuario
+var servidorId = "1";//Cambiar ID del Servidor
+var fechaInicio = new Date("01/01/2023");//Cambiar fecha de inicio (Formato MM/DD/YYYY)
+var fechaFin = new Date("01/01/2023");//Cambiar fecha de final (Formato MM/DD/YYYY)
+
+db.mensajes.aggregate([
+  {
+    $match: {
+      usuarioEmisorId: usuarioId,
+      servidorId: servidorId,
+      fecha: {
+        $gte: fechaInicio,
+        $lte: fechaFin
+      }
+    }
+  },
+  {
+    $group: {
+      _id: "$canalId",
+      cantidadMensajes: { $sum: 1 }
+    }
+  },
+  {
+    $sort: {
+      cantidadMensajes: -1
+    }
+  }
+]);
+
+//Requerimento 5: Proveer una consulta que dado un canal, muestre los últimos 100 mensajes (de cualquier tipo) enviados al canal. En caso de ser archivos, contener hashtags, etc. deben también mostrarse
+var idCanal= "1";//Cambiar ID del Canal
+db.mensajes.find({ canalId: idCanal })
+  .sort({ fecha: -1 })
+  .limit(100);
+
